@@ -1,0 +1,113 @@
+Import to Libraries
+#Import to Libraries
+from tensorflow.keras import layers
+from tensorflow.keras import Sequential
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import *
+Data Loading...
+#Data Loading...
+df = pd.read_csv('../input/machine-learning-tutorials-example-projects-ai/keras-deep-learning-1/data.csv')
+
+def number_gender_change(x):
+    if x == 'UP':
+        return 0
+    elif x == 'DOWN':
+        return 1
+#change of the str to int.
+df['Type'] = df['Type'].apply(number_gender_change)
+
+X = np.array(df.iloc[:,2:]).reshape(-1,99,1)
+y = np.array(df.iloc[:,1:2]).reshape(-1,1,1)
+Data Split, Model Creating and Model Fitting
+# Data Split
+for i in np.arange(0,1,1):
+    print(f"X: {i} ")
+    
+    #Model Creating
+    
+    model = Sequential(layers=None,name="Emirhan_Project_1")
+
+    model.add(layers.Conv1D(32,2,
+                            activation="gelu",
+                            use_bias=True,
+                            input_shape=(99,1)))
+    model.add(layers.MaxPool1D(2,2))
+    model.add(layers.Conv1D(64,2,
+                            use_bias=True,
+                            activation='gelu'))
+    model.add(layers.MaxPool1D(2,2))
+    model.add(layers.Conv1D(96,2,
+                            use_bias=True,
+                            activation='gelu'))
+    model.add(layers.MaxPool1D(2,2))
+    model.add(layers.Flatten(data_format=None))
+    model.add(layers.Dense(units=128,
+                           use_bias=True,
+                           activation='gelu'))
+    model.add(layers.Dense(units=2,
+                           activation='softmax',
+                           use_bias=True,))
+
+    #model.metrics.index(45,inputshape(15,))
+
+    model.compile(metrics=['accuracy'],
+                  optimizer='adam',
+                  loss="mse")
+    #Model Fitting
+    history = model.fit(X, y,validation_split=0.1, epochs=16,batch_size=128,verbose=1,shuffle=True)
+X: 0 
+Epoch 1/16
+2/2 [==============================] - 1s 287ms/step - loss: 0.5000 - accuracy: 0.5435 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 2/16
+2/2 [==============================] - 0s 79ms/step - loss: 0.5000 - accuracy: 0.4405 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 3/16
+2/2 [==============================] - 0s 72ms/step - loss: 0.5000 - accuracy: 0.4639 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 4/16
+2/2 [==============================] - 0s 72ms/step - loss: 0.5000 - accuracy: 0.4665 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 5/16
+2/2 [==============================] - 0s 84ms/step - loss: 0.5000 - accuracy: 0.4639 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 6/16
+2/2 [==============================] - 0s 72ms/step - loss: 0.5000 - accuracy: 0.4587 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 7/16
+2/2 [==============================] - 0s 74ms/step - loss: 0.5000 - accuracy: 0.4457 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 8/16
+2/2 [==============================] - 0s 73ms/step - loss: 0.5000 - accuracy: 0.4796 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 9/16
+2/2 [==============================] - 0s 76ms/step - loss: 0.5000 - accuracy: 0.4587 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 10/16
+2/2 [==============================] - 0s 77ms/step - loss: 0.5000 - accuracy: 0.4587 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 11/16
+2/2 [==============================] - 0s 73ms/step - loss: 0.5000 - accuracy: 0.4535 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 12/16
+2/2 [==============================] - 0s 75ms/step - loss: 0.5000 - accuracy: 0.4561 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 13/16
+2/2 [==============================] - 0s 73ms/step - loss: 0.5000 - accuracy: 0.4692 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 14/16
+2/2 [==============================] - 0s 80ms/step - loss: 0.5000 - accuracy: 0.4718 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 15/16
+2/2 [==============================] - 0s 79ms/step - loss: 0.5000 - accuracy: 0.4483 - val_loss: 0.5000 - val_accuracy: 1.0000
+Epoch 16/16
+2/2 [==============================] - 0s 76ms/step - loss: 0.5000 - accuracy: 0.4718 - val_loss: 0.5000 - val_accuracy: 1.0000
+Metrics & Plot with Matplotlib
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+dict_keys(['loss', 'accuracy', 'val_loss', 'val_accuracy'])
+
